@@ -1,0 +1,15 @@
+[package]
+name = "nxtbot-loader"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "nxtbot"
+path = "src/main.rs"
+
+[dependencies]
+log = "0.4.17"
+simple_logger = "4.0.0"
+dll-injector = "0.1.2"
+dirs = "4.0.0"
+nxtbot-dll = { path = "../nxtbot-dll" }
