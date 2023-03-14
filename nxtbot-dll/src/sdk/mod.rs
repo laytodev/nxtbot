@@ -1,12 +1,14 @@
 pub mod error;
 pub mod hooks;
-pub mod macros;
+pub mod overlay;
 
 use std::future::IntoFuture;
 
 use lazy_static::lazy_static;
 use once_cell::sync::OnceCell;
 use tokio::{runtime::Runtime, task::JoinHandle};
+
+use crate::sdk::overlay::Overlay;
 
 lazy_static! {
     pub static ref SDK: Sdk = Sdk::setup();
@@ -21,18 +23,19 @@ pub trait Global: Send + Sync + Sized {
 }
 
 pub struct Sdk {
-    scheduler: Runtime
+    pub overlay: &'static Overlay,
+    pub scheduler: Runtime
 }
 
 impl Sdk {
     pub fn setup() -> Self {
         log::info!("Setting up SDK.");
 
-        unsafe { log::info!("LoginState: {:x}", FnDoLoggedOutCycle.address()); }
-
+        let overlay = Overlay::get_or_create();
         let scheduler = Runtime::new().unwrap();
 
         Self {
+            overlay,
             scheduler
         }
     }

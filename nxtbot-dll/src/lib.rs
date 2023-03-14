@@ -1,4 +1,12 @@
-mod sdk;
+#![feature(naked_functions)]
+#![feature(unboxed_closures)]
+#![feature(fn_traits)]
+#![feature(concat_idents)]
+#![feature(inherent_associated_types)]
+#![feature(tuple_trait)]
+
+pub mod sdk;
+pub mod engine;
 
 use std::{thread, panic, io::{stdin, Stdin, Read}};
 
@@ -28,6 +36,7 @@ unsafe fn on_load() {
 
         // Initialize the SDK and start the internal scheduler cycle.
         lazy_static::initialize(&SDK);
+        engine::start();
         SDK.do_cycle();
     });
 
